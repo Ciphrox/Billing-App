@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { BillItem, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createUpdateUser = async (id: string, name: string) => {
@@ -22,9 +22,9 @@ interface createItemBody {
 }
 
 export const createItem = async (id: string, item: createItemBody) => {
-  console.log('in queries')
-  console.log(item);
-  console.log(typeof item.name)
+  // console.log('in queries')
+  // console.log(item);
+  // console.log(typeof item.name)
   await prisma.items.create({
     data: {
       name: item.name,
@@ -34,7 +34,6 @@ export const createItem = async (id: string, item: createItemBody) => {
     },
   });
 };
-
 
 export const getItems = async (id: string) => {
   try {
@@ -58,7 +57,7 @@ export const getItems = async (id: string) => {
 };
 
 export const deleteItem = async (id: number, userId: string) => {
-  console.log('id', id, )
+  // console.log('id', id, )
   // console.log('userId', userId)
   // console.log('item deleted')
   await prisma.items.delete({
@@ -67,4 +66,77 @@ export const deleteItem = async (id: number, userId: string) => {
       userId: userId,
     },
   });
+};
+
+interface Billing {
+  Date: Date;
+  bill: BillItem[];
+}
+
+export const createBill = async (id: string, data: Billing, userId: string) => {
+  console.log("in queries");
+  console.log(data);
+
+  const { Date: billDate, bill } = data;
+
+  try {
+    // Check if a DayBilling entry already exists for the given date and userId
+    let existingDayBilling = await prisma.dayBilling.findUnique({
+      where: {
+        date_userId: {
+          date: new Date(billDate),
+          userId: userId,
+        },
+      },
+      include: {
+        Billing: true,
+      },
+    });
+
+    let dayBillingId;
+
+    if (existingDayBilling) {
+      // DayBilling entry exists, use its ID
+      dayBillingId = existingDayBilling.id;
+    } else {
+      // DayBilling entry does not exist, create a new one
+      const newDayBilling = await prisma.dayBilling.create({
+        data: {
+          date: new Date(billDate),
+          userId: userId,
+        },
+      });
+
+      dayBillingId = newDayBilling.id;
+    }
+
+    // Create new Billing entries under the existing or new DayBilling entry
+    const createdBillingEntries = await Promise.all(
+      bill.map((item) =>
+        prisma.billing.create({
+          data: {
+            DayBillingId: dayBillingId,
+            BillItem: {
+              create: {
+                batchId: item.batchNo,
+                name: item.name,
+                type: item.type,
+                price: item.price,
+                quantity: item.quantity,
+                expiry: new Date(item.expiryDate),
+                amount: item.amount,
+              },
+            },
+          },
+        })
+      )
+    );
+
+    console.log('Created Billing entries:', createdBillingEntries);
+  } catch (error) {
+    console.error('Error creating data:', error);
+  }
+
+  // console.log(data.date.toLocaleDateString())
+  // console.log(bill[0].expiryDate);
 };

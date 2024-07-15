@@ -18,14 +18,13 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import { Button } from "@nextui-org/button";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
+import { Input } from "@nextui-org/input";
 
 import Search from "./search";
 import { ChevronDownIcon } from "./icons";
 
 import { DeleteIcon } from "@/svg/edit";
 import { EditIcon } from "@/svg/delete";
-import { Input } from "@nextui-org/input";
 
 interface Item {
   id: number;
@@ -71,10 +70,13 @@ const Items = ({
 
   useEffect(() => {
     console.log("in useEffect for pagination");
-    // console.log(items.length, filteredItems.length);
+    console.log(items.length, filteredItems.length);
     const start = (currentPage - 1) * itemPerPage;
     const end = start + itemPerPage;
-    const paginatedItems = filteredItems.slice(start, end);
+    console.warn(filteredItems);
+
+    const paginatedItems =
+      filteredItems.length > 0 ? filteredItems.slice(start, end) : [];
 
     setPaginatedItems(paginatedItems);
   }, [currentPage, filteredItems]);
@@ -129,12 +131,12 @@ const Items = ({
     });
   };
 
-  console.log(
-    "items",
-    items.length,
-    filteredItems.length,
-    paginatedItems.length
-  );
+  // console.log(
+  //   "items",
+  //   items.length,
+  //   filteredItems.length,
+  //   paginatedItems.length
+  // );
 
   return (
     <>
@@ -181,23 +183,6 @@ const Items = ({
               >
                 Descending
               </DropdownItem>
-              {/* {(item) => (
-                <DropdownItem
-                  key={item.id}
-                  // color={item.key === "delete" ? "danger" : "default"}
-                  // className={item.key === "delete" ? "text-danger" : ""}
-                >
-                  {item.name}
-                </DropdownItem>
-              )} */}
-
-              {/* {filteredItems.map((item) => (
-                <DropdownItem key={item.id} className="capitalize">
-                  {capitalize(item.name)}
-                </DropdownItem>
-              ))}{" "}
-              */
-              /*{" "} */}
             </DropdownMenu>
           </Dropdown>
           {/* <Button
@@ -208,24 +193,6 @@ const Items = ({
           >
             Add New
           </Button> */}
-          <Popover placement="bottom" showArrow offset={10}>
-            <PopoverTrigger>
-              <Button color="primary">Add Item</Button>
-            </PopoverTrigger>
-            <PopoverContent className="">
-              {(titleProps) => (
-                <div className="px-1 py-2 w-full">
-                  <p
-                    className="text-small font-bold text-foreground"
-                    {...titleProps}
-                  >
-                    Add Item
-                  </p>
-                  <div className="mt-2 flex flex-col gap-2 w-full"></div>
-                </div>
-              )}
-            </PopoverContent>
-          </Popover>
         </div>
         <Table aria-label="item-table">
           <TableHeader>

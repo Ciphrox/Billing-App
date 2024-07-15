@@ -14,35 +14,49 @@ datasource db {
 }
 
 model BillItem {
-  id      Int      @id @default(autoincrement())
-  name    String   @db.VarChar(255)
-  type    String   @db.VarChar(255)
-  price   Int      @db.Integer
-  expiry  DateTime @db.Timestamp
-  billId  Int
-  Billing Billing  @relation(fields: [billId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id       Int      @id @default(autoincrement())
+  batchId  String
+  name     String
+  type     String
+  price    Int
+  quantity Int
+  expiry   DateTime
+  amount   Int
+  billId   Int
+  Billing  Billing  @relation(fields: [billId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model Billing {
-  id        Int        @id @default(autoincrement())
-  date      DateTime
-  billItems BillItem[]
-  userId    String
-  User      User       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id           Int        @id @default(autoincrement())
+  BillItem     BillItem[]
+  DayBillingId Int
+  DayBilling   DayBilling @relation(fields: [DayBillingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model DayBilling {
+  id      Int       @id @default(autoincrement())
+  date    DateTime  @unique
+  Billing Billing[]
+  userId  String
+  User    User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([date, userId])
 }
 
 model Items {
-  id     Int     @id @default(autoincrement())
-  name   String  @db.VarChar(255)
-  type   String?
-  price  Int?    @default(0)
+  id     Int    @id @default(autoincrement())
+  name   String
+  type   String
+  price  Int
   userId String
-  User   User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User   User   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([name, userId])
 }
 
 model User {
-  id       String    @id
-  name     String?   @db.VarChar(255)
-  Item     Items[]
-  Billings Billing[]
+  id          String       @id
+  name        String       @default("Unnamed User")
+  Item        Items[]
+  DayBillings DayBilling[]
 }

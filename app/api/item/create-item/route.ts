@@ -13,10 +13,7 @@ export async function POST(request: Request) {
   const { itemName, itemType, itemPrice }: RequestBody = await request.json();
 
   if (!itemName || !itemType || !itemPrice) {
-    return NextResponse.json(
-      { error: "Incomplete Request" },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "Incomplete Request" }, { status: 400 });
   }
 
   const user = await currentUser();

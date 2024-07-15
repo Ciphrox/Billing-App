@@ -20,6 +20,7 @@ const Page: React.FC = () => {
   const [itemPrice, setItemPrice] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [items, setItems] = useState<[Item] | []>([]);
 
@@ -53,6 +54,7 @@ const Page: React.FC = () => {
   const handleAddItemClick = async () => {
     // console.log(itemName);
 
+    setLoading(true);
     if (!itemName) return;
 
     try {
@@ -84,6 +86,7 @@ const Page: React.FC = () => {
       setError("An unexpected error occurred");
       setSuccess(null);
     }
+    setLoading(false);
   };
 
   return (
@@ -93,18 +96,21 @@ const Page: React.FC = () => {
       <div className="flex justify-center items-center h-8 space-x-4">
         <div className="flex w-full space-x-2">
           <Input
+            isDisabled={loading}
             label="Name"
             type="text"
             // value={itemName}
             onValueChange={(string) => setItemName(string)}
           />
           <Input
+            isDisabled={loading}
             label="Type"
             type="text"
             // value={itemType}
             onValueChange={(string) => setItemType(string)}
           />
           <Input
+            isDisabled={loading}
             label="Price (₹)"
             type="number"
             // value={itemPrice}
@@ -112,6 +118,7 @@ const Page: React.FC = () => {
           />
         </div>
         <Button
+          isLoading={loading}
           className="h-10"
           color="primary"
           variant="flat"
