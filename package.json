@@ -10,9 +10,12 @@
 	},
 	"dependencies": {
 		"@clerk/nextjs": "^5.1.6",
+		"@faker-js/faker": "^8.4.1",
 		"@nextui-org/accordion": "^2.0.35",
 		"@nextui-org/autocomplete": "^2.1.2",
+		"@nextui-org/breadcrumbs": "^2.0.10",
 		"@nextui-org/button": "2.0.34",
+		"@nextui-org/card": "^2.0.31",
 		"@nextui-org/code": "2.0.29",
 		"@nextui-org/date-input": "^2.1.1",
 		"@nextui-org/divider": "^2.0.28",

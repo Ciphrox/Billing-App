@@ -2,6 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 import { createItem, getItems } from "@/server/db/queries";
+import { revalidatePath } from "next/cache";
 
 interface RequestBody {
   itemName: string;
@@ -31,11 +32,12 @@ export async function POST(request: Request) {
   };
 
   await createItem(user.id, item);
+  revalidatePath("/items");
 
-  const data = await getItems(user.id);
+  // const data = await getItems(user.id);
 
-  return NextResponse.json({
-    data: data,
-    message: "Item created successfully",
-  });
+  // return NextResponse.json({
+  //   data: data,
+  //   message: "Item created successfully",
+  // });
 }

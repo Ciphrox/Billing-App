@@ -18,7 +18,6 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/input";
 
 import Search from "./search";
 import { ChevronDownIcon } from "./icons";

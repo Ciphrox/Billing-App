@@ -5,7 +5,6 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 
 import Items from "@/components/items";
-
 interface Item {
   id: number | null;
   name: string;
