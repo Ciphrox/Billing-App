@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 import { useEffect, useState } from "react";
 import { Button } from "@nextui-org/button";
@@ -6,11 +5,10 @@ import { Input } from "@nextui-org/input";
 
 import Items from "@/components/items";
 interface Item {
-  id: number | null;
+  id: number;
   name: string;
-  type: string | null;
+  type: string;
   price: number;
-  userId: string | null;
 }
 
 const Page: React.FC = () => {
@@ -21,7 +19,7 @@ const Page: React.FC = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [items, setItems] = useState<[Item] | []>([]);
+  const [items, setItems] = useState<Item[]>([]);
 
   // const res = await fetch("/api/item/list-items");
   useEffect(() => {

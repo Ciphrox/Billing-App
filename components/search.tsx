@@ -3,7 +3,11 @@ import { Input } from "@nextui-org/input";
 
 import { SearchIcon } from "./icons";
 
-const Search = ({ onValueChange }) => {
+const Search = ({
+  onValueChange,
+}: {
+  onValueChange: (value: string) => void;
+}) => {
   return (
     <div>
       <Input

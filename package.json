@@ -31,6 +31,7 @@
 		"@nextui-org/snippet": "2.0.38",
 		"@nextui-org/switch": "2.0.31",
 		"@nextui-org/system": "2.2.1",
+		"@nextui-org/table": "^2.0.39",
 		"@nextui-org/theme": "2.2.5",
 		"@nextui-org/tooltip": "^2.0.36",
 		"@prisma/client": "^5.16.1",
@@ -45,9 +46,11 @@
 		"next-themes": "^0.2.1",
 		"prisma": "^5.16.1",
 		"react": "18.3.1",
+		"react-datepicker": "^7.3.0",
 		"react-dom": "18.3.1",
 		"svix": "^1.24.0",
-		"table": "^6.8.2"
+		"table": "^6.8.2",
+		"zod": "^3.23.8"
 	},
 	"devDependencies": {
 		"@types/node": "20.5.7",

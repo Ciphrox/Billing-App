@@ -25,13 +25,12 @@ import { ChevronDownIcon } from "./icons";
 import { DeleteIcon } from "@/svg/edit";
 import { EditIcon } from "@/svg/delete";
 
-interface Item {
+type Item = {
   id: number;
   name: string;
-  type: string | null;
+  type: string;
   price: number;
-  userId: string;
-}
+};
 
 const Items = ({
   items,
@@ -47,18 +46,18 @@ const Items = ({
   const totalPages = Math.ceil(filteredItems.length / itemPerPage);
   const [paginatedItems, setPaginatedItems] = useState(items);
 
-  const [sorting, setSorting] = useState("acc");
+  const [sorting, setSorting] = useState<"acc" | "dec">("acc");
 
   useEffect(() => {
     let sorted = [...filteredItems];
 
     if (sorting === "acc") {
-      sorted = filteredItems.toSorted((item1, item2) =>
-        item1.name > item2.name ? 1 : -1
+      sorted.sort((item1, item2) =>
+        item1.name.toLocaleLowerCase() > item2.name.toLocaleLowerCase() ? 1 : -1
       );
     } else if (sorting === "dec") {
-      sorted = filteredItems.toSorted((item1, item2) =>
-        item1.name < item2.name ? 1 : -1
+      sorted.sort((item1, item2) =>
+        item1.name.toLocaleLowerCase() < item2.name.toLocaleLowerCase() ? 1 : -1
       );
     }
 
@@ -72,7 +71,7 @@ const Items = ({
     console.log(items.length, filteredItems.length);
     const start = (currentPage - 1) * itemPerPage;
     const end = start + itemPerPage;
-    console.warn(filteredItems);
+    // console.warn(filteredItems);
 
     const paginatedItems =
       filteredItems.length > 0 ? filteredItems.slice(start, end) : [];
@@ -204,8 +203,8 @@ const Items = ({
             <TableBody>
               {paginatedItems.map((item: Item) => (
                 <TableRow key={item.id}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.type}</TableCell>
+                  <TableCell className="capitalize">{item.name}</TableCell>
+                  <TableCell className="capitalize">{item.type}</TableCell>
                   <TableCell>{item.price}</TableCell>
                   <TableCell>
                     <div className="relative flex items-center gap-2">

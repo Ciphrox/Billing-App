@@ -7,13 +7,13 @@ import { Button } from "@nextui-org/button";
 
 import { DeleteIcon } from "@/svg/edit";
 
-interface Item {
+type Item = {
   id: number;
   name: string;
   type: string;
   price: number;
   userId: string | null;
-}
+};
 
 const BillItem = ({
   items,
@@ -72,17 +72,21 @@ const BillItem = ({
           onValueChange={(value) => setBatchNo(value)}
         />
         <Autocomplete
-          isDisabled={loading}
           className="max-w-xs"
+          isDisabled={loading}
           label="Name"
           onSelectionChange={(itemId) => {
+            console.log(itemId);
+            // return
             if (itemId === null) {
               setPrice(0);
               setType("");
               return;
             }
-            const id: number = parseInt(itemId, 10);
-            const item = items.find((item) => item.id === id);
+            // const id: number = parseInt(itemId, 10);
+            const item = items.find((item) => item.id === itemId);
+
+            if (!item) return;
             setName(item.name);
             setPrice(item.price);
             setType(item.type);

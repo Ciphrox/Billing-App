@@ -27,7 +27,7 @@ export const createItem = async (id: string, item: createItemBody) => {
   // console.log(typeof item.name)
   await prisma.items.create({
     data: {
-      name: item.name,
+      name: item.name.toLowerCase(),
       type: item.type,
       price: item.price,
       userId: id,
@@ -70,7 +70,17 @@ export const deleteItem = async (id: number, userId: string) => {
 
 interface Billing {
   Date: Date;
-  bill: BillItem[];
+  bill: {
+    id: number;
+    batchNo: string;
+    name: string;
+    type: string;
+    price: number;
+    quantity: number;
+    expiryDate: Date;
+    amount: number;
+    billId: number;
+  }[];
 }
 
 export const createBill = async (id: string, data: Billing, userId: string) => {
@@ -93,7 +103,7 @@ export const createBill = async (id: string, data: Billing, userId: string) => {
       },
     });
 
-    let dayBillingId;
+    let dayBillingId: number;
 
     if (existingDayBilling) {
       // DayBilling entry exists, use its ID
@@ -139,4 +149,41 @@ export const createBill = async (id: string, data: Billing, userId: string) => {
 
   // console.log(data.date.toLocaleDateString())
   // console.log(bill[0].expiryDate);
+};
+
+export const getUserDailyBills = async (id: string) => {
+  try {
+    const dailyBills = await prisma.dayBilling.findMany({
+      where: {
+        userId: id,
+      },
+      include: {
+        Billing: {
+          include: {
+            BillItem: true,
+          },
+        },
+      },
+    });
+
+    // console.log('Daily Bills:', dailyBills);
+    return dailyBills;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteDayBill = async (userId: string, dayBillId: number) => {
+  try {
+    await prisma.dayBilling.delete({
+      where: {
+        id: dayBillId,
+        userId: userId,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+
+  return;
 };

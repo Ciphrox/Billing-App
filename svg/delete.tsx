@@ -1,5 +1,7 @@
 import React from "react";
-export const EditIcon = (props) => (
+export const EditIcon = (
+  props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>,
+) => (
   <svg
     aria-hidden="true"
     fill="none"

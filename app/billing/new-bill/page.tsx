@@ -5,7 +5,7 @@ import { DateInput } from "@nextui-org/date-input";
 import { Input } from "@nextui-org/input";
 import { Divider } from "@nextui-org/divider";
 
-import BillItem from "../_components/billItem";
+import BillItem from "./_components/billItem";
 
 const Page = () => {
   const [items, setItems] = useState<any>([]);
@@ -123,7 +123,11 @@ const Page = () => {
           isLoading={loading}
           onClick={async () => {
             setLoading(true);
-            const data = { Date: billDate, bill: bill };
+
+            const data = {
+              Date: new Date(billDate.toDateString()),
+              bill: bill,
+            };
 
             const responce = await fetch("/api/billing/create-bill", {
               method: "POST",
