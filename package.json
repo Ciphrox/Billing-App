@@ -10,7 +10,6 @@
 	},
 	"dependencies": {
 		"@clerk/nextjs": "^5.1.6",
-		"@faker-js/faker": "^8.4.1",
 		"@nextui-org/accordion": "^2.0.35",
 		"@nextui-org/autocomplete": "^2.1.2",
 		"@nextui-org/breadcrumbs": "^2.0.10",

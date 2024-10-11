@@ -19,11 +19,13 @@ import {
 } from "@nextui-org/dropdown";
 import { Button } from "@nextui-org/button";
 
-import Search from "./search";
-import { ChevronDownIcon } from "./icons";
+import Search from "../../../components/search";
+import { ChevronDownIcon } from "../../../components/icons";
 
 import { DeleteIcon } from "@/svg/edit";
 import { EditIcon } from "@/svg/delete";
+import { ItemTable } from "./_components/itemTable";
+
 
 type Item = {
   id: number;
@@ -32,13 +34,16 @@ type Item = {
   price: number;
 };
 
-const Items = ({
-  items,
-  setItems,
+const ItemTableSection = ({
+  children,
+  // items,
+  // setItems,
 }: {
-  items: Item[];
-  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
+  children: React.ReactNode;
+  // items: Item[];
+  // setItems: React.Dispatch<React.SetStateAction<Item[]>>;
 }) => {
+  const [items, setItems] = useState<Item[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [filteredItems, setFilteredItems] = useState(items);
   const itemPerPage = 8;
@@ -101,6 +106,10 @@ const Items = ({
 
     setFilteredItems(filtered);
   }, [searchValue, items]);
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   const fetchItems = async () => {
     try {
@@ -192,6 +201,8 @@ const Items = ({
             Add New
           </Button> */}
         </div>
+        {/* <ItemTable /> */}
+        {/* {children} */}
         <Table aria-label="item-table">
           <TableHeader>
             <TableColumn align="start">Items</TableColumn>
@@ -239,4 +250,4 @@ const Items = ({
   );
 };
 
-export default Items;
+export default ItemTableSection;

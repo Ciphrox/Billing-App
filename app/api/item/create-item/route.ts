@@ -1,44 +1,62 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 import { createItem, getItems } from "@/server/db/queries";
+import { revalidatePath } from "next/cache";
 
-interface RequestBody {
-  itemName: string;
-  itemType: string;
-  itemPrice: number;
-}
+const itemSchema = z.object({
+  itemName: z.string().min(1, { message: "Item name is required" }),
+  itemType: z.string().min(1, { message: "Item type is required" }),
+  itemPrice: z
+    .number()
+    .min(0, { message: "Item price must be a non-negative number" }),
+});
 
 export async function POST(request: Request) {
+  try {
+    const { itemName, itemType, itemPrice } = itemSchema.parse(
+      await request.json(),
+    );
 
-  const { itemName, itemType, itemPrice }: RequestBody = await request.json();
+    const user = await currentUser();
 
-  if (!itemName || !itemType || !itemPrice) {
-    return NextResponse.json({ error: "Incomplete Request" }, { status: 400 });
-  }
+    if (!user) {
+      return NextResponse.json(
+        { error: "User not authenticated" },
+        { status: 401 },
+      );
+    }
 
-  const user = await currentUser();
+    const item = {
+      name: itemName,
+      type: itemType,
+      price: itemPrice,
+    };
 
-  if (!user) {
+    await createItem(user.id, item);
+
+    const data = await getItems(user.id);
+
+    // revalidatePath("/items");
+
+    return NextResponse.json({
+      data: data,
+      message: "Item created successfully",
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      // Handle Zod validation errors
+      return NextResponse.json(
+        { error: error.errors.map((e) => e.message).join(", ") },
+        { status: 400 },
+      );
+    }
+
+    // Handle other errors
     return NextResponse.json(
-      { error: "User not authenticated" },
-      { status: 401 },
+      { error: "An unexpected error occurred" },
+      { status: 500 },
     );
   }
-  const item = {
-    name: itemName as string,
-    type: itemType as string,
-    price: itemPrice as number,
-  };
-
-  await createItem(user.id, item);
-  // revalidatePath("/items");
-
-  const data = await getItems(user.id);
-
-  return NextResponse.json({
-    data: data,
-    message: "Item created successfully",
-  });
 }
