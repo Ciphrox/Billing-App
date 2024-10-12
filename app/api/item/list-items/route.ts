@@ -31,7 +31,7 @@ export async function GET() {
 
     return NextResponse.json(items, { headers });
   } catch (error) {
-    console.error("Error fetching items:", error);
+    // console.error("Error fetching items:", error);
 
     return NextResponse.json(
       { error: "Failed to fetch items" },

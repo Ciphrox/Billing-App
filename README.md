@@ -2,12 +2,17 @@
 
 A web-based shop management system built with Next.js, Clerk for authentication, Prisma for database management, and NextUI for UI components. This system allows users to manage items, create bills, and process payments.
 
+> 🚧 **Note:**
+This project is currently in development, and features may not be fully functional or may be subject to change. Please proceed with caution! 🚧
+
 ## Features
 
-- **Authentication**: Secure login and registration using Clerk.
-- **Item Management**: Manage shop items with the ability to add, update, and delete items.
-- **Bill Creation**: Generate bills by adding items to the bill, with automatic total calculation.
-- **Responsive Design**: Built using Tailwind CSS for a mobile-friendly, responsive layout.
+Features
+
+- 🔐 **Authentication:** Secure login and registration using Clerk.
+- 🛒 **Item Management:** Manage shop items with the ability to add, update, and delete items.
+- 💵 **Bill Creation:** Generate bills by adding items to the bill, with automatic total calculation.
+- 📱**Responsive Design**: Built using Tailwind CSS for a mobile-friendly, responsive layout.
 
 ## Tech Stack
 

@@ -5,8 +5,9 @@ import { Divider } from "@nextui-org/divider";
 import Link from "next/link";
 import { Button } from "@nextui-org/button";
 
-import { DeleteIcon } from "@/svg/edit";
 import Bill from "./_components/Bill";
+
+import { DeleteIcon } from "@/svg/edit";
 
 type dayBilling = {
   id: number;
@@ -34,14 +35,14 @@ export default function Page() {
   const fetchDayBills = async () => {
     setIsloaded(false);
     const responce = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/billing/`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/billing/`,
     );
 
     const data = await responce.json();
     const fetchedDailyBills = data.data;
 
-    console.log(dailyBills);
-    console.log(fetchedDailyBills);
+    // console.log(dailyBills);
+    // console.log(fetchedDailyBills);
     setDailyBills(fetchedDailyBills);
 
     setIsloaded(true);
@@ -160,7 +161,7 @@ export default function Page() {
                     (acc, bill) =>
                       acc +
                       bill.BillItem.reduce((acc, item) => acc + item.amount, 0),
-                    0
+                    0,
                   )}
                 </p>
               </CardFooter>
